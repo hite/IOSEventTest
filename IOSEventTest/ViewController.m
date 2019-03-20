@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "HitTestBaseViewController.h"
 
 @interface ViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *image;
@@ -82,7 +83,7 @@ metamacro_head_(__VA_ARGS__, 0)
  */
 #define metamacro_argcount(...) \
 metamacro_at(20, __VA_ARGS__, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
-//结束.总结：可变参数是除了声明外的其它参数。利用位置，将已有的数据挤出去，这样就可以获取到参数个数了。
+//结束.总结:可变参数是除了声明外的其它参数。利用位置，将已有的数据挤出去，这样就可以获取到参数个数了。
 
 #define metamacro_foreach_cxt1(MACRO, SEP, CONTEXT, _0) MACRO(0, CONTEXT, _0)
 
@@ -91,7 +92,13 @@ metamacro_at(20, __VA_ARGS__, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 
 #define rac_strongify_(INDEX, VAR) \
 __strong __typeof__(VAR) VAR = metamacro_concat(VAR, _weak_);
 
-@implementation ViewController
+@interface ViewController() <UITableViewDelegate, UITableViewDataSource>
+
+@end
+
+@implementation ViewController{
+    NSArray<NSDictionary *> *_allControllers;
+}
 
 
 - (void)viewDidLoad {
@@ -101,21 +108,75 @@ __strong __typeof__(VAR) VAR = metamacro_concat(VAR, _weak_);
     
 //    LOG_MACRO2(metamacro_argcount(a,b,c,d));
 //    上面的例子研究了如何展开 metamacro_argcount 是如何展开的
+    self->_allControllers = @[
+        @{ @"title" : @"Touch ",
+           @"cls" : @"HitTestTouchViewController",
+           @"bubbleUp" : @0 },
+        @{ @"title" : @"Touch, Bubble up ",
+           @"cls" : @"HitTestTouchViewController",
+           @"bubbleUp" : @1 },
+        @{ @"title" : @"gesture, Touch ",
+           @"cls" : @"HitTestTouchGestureController",
+           @"bubbleUp" : @0 },
+        @{ @"title" : @"gesture, Touch Bubble up ",
+           @"cls" : @"HitTestTouchGestureController",
+           @"bubbleUp" : @1 },
+        @{ @"title" : @"button, Touch ",
+           @"cls" : @"HitTestButtonViewController",
+           @"bubbleUp" : @0 },
+        @{ @"title" : @"button, Touch  Bubble up ",
+           @"cls" : @"HitTestButtonViewController",
+           @"bubbleUp" : @1 },
+        @{ @"title" : @"button, gestrue, Touch ",
+           @"cls" : @"HitTestButtonGestureController",
+           @"bubbleUp" : @0 },
+        @{ @"title" : @"button, gestrue, Touch  Bubble up ",
+           @"cls" : @"HitTestButtonGestureController",
+           @"bubbleUp" : @1 }
+    ];
+
+    UITableView *tableView = [UITableView new];
+    [self.view addSubview:tableView];
+    tableView.frame = self.view.bounds;
+    tableView.delegate = self;
+    tableView.dataSource = self;
     
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] init];
-    [tap addTarget:self action:@selector(tapImage:)];
-    [self.image addGestureRecognizer:tap];
 }
 
-- (void)tapImage:(id)sender
+#pragma
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    NSLog(@"tap image");
+    return 1;
 }
 
-- (IBAction)tapBtn:(id)sender {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return self->_allControllers.count;
 }
 
-- (IBAction)tapBtn2:(id)sender {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *kIdentifier = @"kIdentifier";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kIdentifier];
+    }
+    NSDictionary *item = [self->_allControllers objectAtIndex:indexPath.row];
+    
+    cell.textLabel.text = [item objectForKey:@"title"];
+    
+    return cell;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+
+    NSDictionary *item = [self->_allControllers objectAtIndex:indexPath.row];
+    Class cls = NSClassFromString([item objectForKey:@"cls"]);
+    HitTestBaseViewController *vc = [cls new];
+    [vc setTitle:[item objectForKey:@"title"]];
+    vc.canBubbleUp = [[item objectForKey:@"bubbleUp"] boolValue];
+    [self.navigationController pushViewController:vc animated:YES];
+}
 @end
