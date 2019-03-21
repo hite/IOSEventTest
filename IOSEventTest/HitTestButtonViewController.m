@@ -55,6 +55,8 @@
     [level_1 addSubview:level_2];
     // 放开下面的注释，可测试相同的 Selector 是否可以被多个 target 选为 action。
 //    [level_2 addTarget:self action:@selector(touchUpInsideAfterAllTouch_2_1:) forControlEvents:UIControlEventTouchUpInside];
+    // 测试 target = nil 时的表现。
+//    [level_2 addTarget:nil action:@selector(touchUpInside_nil_target:) forControlEvents:UIControlEventTouchUpInside];
     [level_2 addTarget:self action:@selector(touchUpInside_2:) forControlEvents:UIControlEventTouchUpInside];
     
     HitTestBubbleButton *level_3 = [[HitTestBubbleButton alloc] initWithName:@"Level_3" bubble:self.canBubbleUp];

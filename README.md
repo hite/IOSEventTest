@@ -18,7 +18,7 @@
 1. 多个相同元素
 2. 多个不同元素
 3. 元素之前的顺序
-4. cancelsTouchesInView 变量
+4. cancelsTouchesInView 变量(不考虑，delaysTouchesBegan，默认为 NO;delaysTouchesEnded，默认为 YES)
 
 *如果没有条件运行源码自己观察，下面是我自己的观察和总结，可能有谬误，欢迎指正*
 #TLTR;#
@@ -50,6 +50,9 @@
 情况1：普通的 UIControl 元素， 所有元素都有 touch 事件，有 action 回调，没有 gesture, touch 事件不 bubble 的情况下
 1. ---- UIApplication 接收到时间，通过 hittest 找到第一响应者之后，先执行 touchesBegan，再执行 touchesEnded。但是不会执行 action 回调（why？）
 2. 猜测原因：super 的 `touchesEnded:withEvent:` 会调用触发 `UIControlEventTouchUpInside`，因为我们没有调用 super 所以没有触发。
+有调用栈为参考，
+![调用栈](https://note.youdao.com/yws/public/resource/da1fb057778fbcf4a05cb9c994b13846/xmlnote/WEBRESOURCE2e305427f7f7b8ec064721da3377d0dc/476)，
+可见，触发 action-target 都是由 UIControl 父类实现的。
  
 情况2：普通的 UIControl 元素， 所有元素都有 touch 事件，有 action 回调，没有 gesture, touch 事件容许 bubble 的情况下
 1. ---- UIApplication 接收到时间，通过 hittest 找到第一响应者之后，先执行 action 回调（allTouchEvent，touchDown 等）、touchesBegan，再执行 action 回调（touchUpInside之类）、touchesEndeded
@@ -61,6 +64,7 @@
     1. cancelsTouchesInView=NO 时，再执行 touchesEnded，
     2. cancelsTouchesInView=YES 时，再执行 touchesCancelled
 1. ---- 不会执行 action 回调，因为没有调用 `touchesEnded` super 方法。 
+>If a gesture recognizer recognizes its gesture, it unbinds the remaining touches of that gesture from their view (so the window won’t deliver them). The window cancels the previously delivered touches with a (touchesCancelled(_:with:)) message. If a gesture recognizer doesn’t recognize its gesture, the view receives all touches in the multi-touch sequence.
  
 情况2：普通的 UIControl 元素， 所有元素都有 touch 事件，有 action 回调，而且有 gesture, touch 事件需要 bubble 的情况下
 1. ---- UIApplication 接收到时间，通过 hittest 找到第一响应者之后
@@ -74,13 +78,22 @@
 2. 相同的 UIControl 的 target-event 可以有多个，不弄是否有相同 event state 类型。
 3. 相同阶段的事件，执行顺序按照添加的顺序。
 3. UIControl 内部的事件不会传播到父元素，gesture 也一样。
-4. gesture 确确实实是独立于 touch event sequence 的事件
+4. gesture 确确实实是独立于 touch event sequence 的事件，但是会干扰 event, Gesture 会先接管 touch event 的流程，然传递给 target-action 处理。
 4. Tap 事件和 view 是一一绑定的关系，多个 view 绑定相同 tap，最后一个有效。
-5. UIControl 的 target-event 只是对 touch event sequence 的采样事件，不会干扰手势也不会干扰 event 本身。
+5. UIControl 的 target-event 只是对 touch event sequence 的采样后触发的逻辑，不会干扰手势也不会干扰 event 本身。注意 touch 的采样不会采样父元素的 touch event sequence。
 6. 在 UIResponder 的事件链路里 touchesBegan 等调用父类的作用不仅仅是向父类传播事件，也在于完成本次 event sequence 事件，到结束或取消。
+7. `When adding an action method to a control, you specify both the action method and an object that defines that method to the addTarget:action:forControlEvents: method. If you specify nil for the target object, the control searches the responder chain for an object that defines the specified action method.` 他的含义在于如果 level_2 元素上的某个类型的 action 对应的 target = nil，则回去找 level_1 的 类型，查询 respondsToSelector 是否为 YES。    
+而不是理解为：level_2 不响应 event，然后让 level_1 来处理，这样理解是错误的。
+
 
 ### 原理
-目前从找到的 UIKit 的源码
+通过简单的调用栈比较发现 当 `[UIWindow sendEvent:]` 之后
+1. Touch 事件由，[UIWindow _sendTouchesForEvent] 分发
+2. TapGesture 事件由，[UIGestureEvnvironment _updateForEvent:window:] 里的 `_wasDeliveredToGestureRecognizers` 分发
+可见两者是两套系统。下面是来自苹果的文档里的一段，描述二者的关系。
+
+>A window delivers touch events to a gesture recognizer before it delivers them to the hit-tested view attached to the gesture recognizer. Generally, if a gesture recognizer analyzes the stream of touches in a multi-touch sequence and doesn’t recognize its gesture, the view receives the full complement of touches. If a gesture recognizer recognizes its gesture, the remaining touches for the view are cancelled. 
+[见文](https://developer.apple.com/documentation/uikit/uigesturerecognizer)
 
 ### 实际应用距举例
 #### 1.模仿 AOP 拦截
@@ -102,3 +115,5 @@ well done。目前这种方式，被我使用在 apm SDK，`SauronEye` 里。用
 ## 参考链接
 1. [iOS事件处理，看我就够了~](https://segmentfault.com/a/1190000013265845) ,本文没有考虑 cancelsTouchesInView 的影响
 2. [iOS 触摸事件响应链](https://cloud.tencent.com/developer/article/1117024)
+3. [Documentation of UIGestureRecognizer](https://developer.apple.com/documentation/uikit/uigesturerecognizer)
+4. [Documentation UIKit Views and Controls UIControl](https://developer.apple.com/documentation/uikit/uicontrol)

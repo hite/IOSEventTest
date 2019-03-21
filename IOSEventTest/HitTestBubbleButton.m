@@ -43,6 +43,11 @@
     return ins;
 }
 
+- (void)touchUpInside_nil_target:(id)sender
+{
+    NSLog(@"测试 target = nil 的情况");
+}
+
 #pragma mark - touch event
 //以下系列方法，调用 super 的方法和 NSLog 的顺序会影响后续 target-action 事件的顺序ß
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
@@ -85,6 +90,30 @@
     NSLog(@"In %@, Method = %s", self, __func__);
 }
 
+#pragma target-action mechanism
+
+- (BOOL)beginTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
+{
+    BOOL succ = [super beginTrackingWithTouch:touch withEvent:event];
+    NSLog(@"In %@, Method = %s", self, __func__);
+    return succ;
+}
+- (BOOL)continueTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
+{
+    BOOL succ = [super continueTrackingWithTouch:touch withEvent:event];
+    NSLog(@"In %@, Method = %s", self, __func__);
+    return succ;
+}
+- (void)endTrackingWithTouch:(UITouch *)touch withEvent:(UIEvent *)event
+{
+    [super endTrackingWithTouch:touch withEvent:event];
+    NSLog(@"In %@, Method = %s", self, __func__);
+}
+- (void)cancelTrackingWithEvent:(UIEvent *)event
+{
+    [super cancelTrackingWithEvent:event];
+    NSLog(@"In %@, Method = %s", self, __func__);
+}
 #pragma override
 
 - (NSString *)description

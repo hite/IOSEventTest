@@ -81,6 +81,7 @@
     [commontap addTarget:self action:@selector(common_button_lv2:)];
     {
 //      测试多个 gestrue 的情况
+//        commontap.cancelsTouchesInView = NO;
 //        [level_2_1 addGestureRecognizer:commontap];
         UITapGestureRecognizer *tap2 = [[UITapGestureRecognizer alloc] init];
         tap2.cancelsTouchesInView = NO;
