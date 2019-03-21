@@ -82,8 +82,9 @@
 4. Tap 事件和 view 是一一绑定的关系，多个 view 绑定相同 tap，最后一个有效。
 5. UIControl 的 target-event 只是对 touch event sequence 的采样后触发的逻辑，不会干扰手势也不会干扰 event 本身。注意 touch 的采样不会采样父元素的 touch event sequence。
 6. 在 UIResponder 的事件链路里 touchesBegan 等调用父类的作用不仅仅是向父类传播事件，也在于完成本次 event sequence 事件，到结束或取消。
+6. `cancelTrackingWithEvent` 是由 `touchesCancelled:withEvent:` 调用的。
 7. `When adding an action method to a control, you specify both the action method and an object that defines that method to the addTarget:action:forControlEvents: method. If you specify nil for the target object, the control searches the responder chain for an object that defines the specified action method.` 他的含义在于如果 level_2 元素上的某个类型的 action 对应的 target = nil，则回去找 level_1 的 类型，查询 respondsToSelector 是否为 YES。    
-而不是理解为：level_2 不响应 event，然后让 level_1 来处理，这样理解是错误的。
+而不是理解为：level_2 不响应 event，然后让 level_1 来处理，这样理解是错误的。当然大部分情况下 target = nil ，还不如将这控件设置为 disabled（不考虑样式上的区别）。
 
 
 ### 原理
