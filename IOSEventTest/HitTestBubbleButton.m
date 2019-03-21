@@ -32,20 +32,19 @@
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
 {
     UIView *v = [super hitTest:point withEvent:event];
-    NSLog(@"在 %@ 查到，查到的目标 target = %@", self, [v description]);
+    NSLog(@"The view %@ finds target = %@", self, [v description]);
     return v;
 }
 
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
 {
     BOOL ins = [super pointInside:point withEvent:event];
-    NSLog(@"%@ 是否在 %@ 内部 = %d", self, NSStringFromCGPoint(point), ins);
+    NSLog(@"The point %@ is %@ in of %@", NSStringFromCGPoint(point), (ins?@"":@" NOT "), self);
     return ins;
 }
 
 #pragma mark - touch event
-#pragma mark - touch event
-
+//以下系列方法，调用 super 的方法和 NSLog 的顺序会影响后续 target-action 事件的顺序ß
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
     if (self.canBubbleUp) {
@@ -90,7 +89,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"[View = %@ , %@]", self.titleLabel.text, self.canBubbleUp?@"冒泡":@"不冒泡"];
+    return [NSString stringWithFormat:@"[View = %@ , %@]", self.titleLabel.text, self.canBubbleUp?@"Bubble":@"Cann`t bubble"];
 }
 
 @end

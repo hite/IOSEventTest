@@ -13,6 +13,13 @@
 		482FF4F721F1C932005FCD7A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 482FF4F621F1C932005FCD7A /* Assets.xcassets */; };
 		482FF4FA21F1C932005FCD7A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 482FF4F821F1C932005FCD7A /* LaunchScreen.storyboard */; };
 		482FF4FD21F1C932005FCD7A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 482FF4FC21F1C932005FCD7A /* main.m */; };
+		484E1D982240EA190071731A /* HitTestBubbleButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 484E1D972240EA190071731A /* HitTestBubbleButton.m */; };
+		484E1D9F224113CE0071731A /* HitTestBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 484E1D9E224113CE0071731A /* HitTestBubbleView.m */; };
+		484E1DA4224116E60071731A /* HitTestTouchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 484E1DA3224116E60071731A /* HitTestTouchViewController.m */; };
+		484E1DA62241171F0071731A /* HitTestTouchGestureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 484E1DA52241171F0071731A /* HitTestTouchGestureController.m */; };
+		484E1DA922411A0F0071731A /* HitTestButtonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 484E1DA722411A0F0071731A /* HitTestButtonViewController.m */; };
+		4899AAAD22421A15006EF13D /* HitTestBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4899AAAC22421A15006EF13D /* HitTestBaseViewController.m */; };
+		4899AAB022425EF4006EF13D /* HitTestButtonGestureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4899AAAF22425EF4006EF13D /* HitTestButtonGestureController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +33,20 @@
 		482FF4F921F1C932005FCD7A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		482FF4FB21F1C932005FCD7A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		482FF4FC21F1C932005FCD7A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		484E1D932240E9B50071731A /* HitTestTouchGestureController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HitTestTouchGestureController.h; sourceTree = "<group>"; };
+		484E1D962240EA190071731A /* HitTestBubbleButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HitTestBubbleButton.h; sourceTree = "<group>"; };
+		484E1D972240EA190071731A /* HitTestBubbleButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HitTestBubbleButton.m; sourceTree = "<group>"; };
+		484E1D9A22410D8E0071731A /* HitTestTouchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HitTestTouchViewController.h; sourceTree = "<group>"; };
+		484E1D9D224113CE0071731A /* HitTestBubbleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HitTestBubbleView.h; sourceTree = "<group>"; };
+		484E1D9E224113CE0071731A /* HitTestBubbleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HitTestBubbleView.m; sourceTree = "<group>"; };
+		484E1DA3224116E60071731A /* HitTestTouchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HitTestTouchViewController.m; sourceTree = "<group>"; };
+		484E1DA52241171F0071731A /* HitTestTouchGestureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HitTestTouchGestureController.m; sourceTree = "<group>"; };
+		484E1DA722411A0F0071731A /* HitTestButtonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HitTestButtonViewController.m; sourceTree = "<group>"; };
+		484E1DA822411A0F0071731A /* HitTestButtonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HitTestButtonViewController.h; sourceTree = "<group>"; };
+		4899AAAB22421A15006EF13D /* HitTestBaseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HitTestBaseViewController.h; sourceTree = "<group>"; };
+		4899AAAC22421A15006EF13D /* HitTestBaseViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HitTestBaseViewController.m; sourceTree = "<group>"; };
+		4899AAAE22425EF4006EF13D /* HitTestButtonGestureController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HitTestButtonGestureController.h; sourceTree = "<group>"; };
+		4899AAAF22425EF4006EF13D /* HitTestButtonGestureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HitTestButtonGestureController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +83,20 @@
 				482FF4EE21F1C92F005FCD7A /* AppDelegate.m */,
 				482FF4F021F1C92F005FCD7A /* ViewController.h */,
 				482FF4F121F1C92F005FCD7A /* ViewController.m */,
+				4899AAAB22421A15006EF13D /* HitTestBaseViewController.h */,
+				4899AAAC22421A15006EF13D /* HitTestBaseViewController.m */,
+				484E1D9A22410D8E0071731A /* HitTestTouchViewController.h */,
+				484E1DA3224116E60071731A /* HitTestTouchViewController.m */,
+				484E1D932240E9B50071731A /* HitTestTouchGestureController.h */,
+				484E1DA52241171F0071731A /* HitTestTouchGestureController.m */,
+				484E1DA822411A0F0071731A /* HitTestButtonViewController.h */,
+				484E1DA722411A0F0071731A /* HitTestButtonViewController.m */,
+				4899AAAE22425EF4006EF13D /* HitTestButtonGestureController.h */,
+				4899AAAF22425EF4006EF13D /* HitTestButtonGestureController.m */,
+				484E1D9D224113CE0071731A /* HitTestBubbleView.h */,
+				484E1D9E224113CE0071731A /* HitTestBubbleView.m */,
+				484E1D962240EA190071731A /* HitTestBubbleButton.h */,
+				484E1D972240EA190071731A /* HitTestBubbleButton.m */,
 				482FF4F321F1C92F005FCD7A /* Main.storyboard */,
 				482FF4F621F1C932005FCD7A /* Assets.xcassets */,
 				482FF4F821F1C932005FCD7A /* LaunchScreen.storyboard */,
@@ -141,9 +176,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				484E1DA4224116E60071731A /* HitTestTouchViewController.m in Sources */,
+				484E1D9F224113CE0071731A /* HitTestBubbleView.m in Sources */,
 				482FF4F221F1C92F005FCD7A /* ViewController.m in Sources */,
 				482FF4FD21F1C932005FCD7A /* main.m in Sources */,
+				4899AAB022425EF4006EF13D /* HitTestButtonGestureController.m in Sources */,
 				482FF4EF21F1C92F005FCD7A /* AppDelegate.m in Sources */,
+				484E1DA922411A0F0071731A /* HitTestButtonViewController.m in Sources */,
+				4899AAAD22421A15006EF13D /* HitTestBaseViewController.m in Sources */,
+				484E1D982240EA190071731A /* HitTestBubbleButton.m in Sources */,
+				484E1DA62241171F0071731A /* HitTestTouchGestureController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -36,7 +36,7 @@
     [self.view addSubview:level_1];
     [level_1 addTarget:self action:@selector(touchUpInside_1:) forControlEvents:UIControlEventTouchUpInside];
 
-    HitTestBubbleButton *level_2_1 = [[HitTestBubbleButton alloc] initWithName:@"level_2_1_cancelsTouchesInView=NO" bubble:self.canBubbleUp];
+    HitTestBubbleButton *level_2_1 = [[HitTestBubbleButton alloc] initWithName:@"level_2_1" bubble:self.canBubbleUp];
     level_2_1.backgroundColor = [[UIColor blueColor] colorWithAlphaComponent:0.5];
     level_2_1.frame = CGRectMake(10, 300, 370, 100);
     [level_1 addSubview:level_2_1];
@@ -49,11 +49,12 @@
     [level_2_1 addTarget:self action:@selector(touchDown_2_1:) forControlEvents:UIControlEventTouchDown];
     [level_2_1 addTarget:self action:@selector(touchUpAfter_2_1:) forControlEvents:UIControlEventTouchUpInside];
 
-
     HitTestBubbleButton *level_2 = [[HitTestBubbleButton alloc] initWithName:@"Level_2" bubble:self.canBubbleUp];
     level_2.backgroundColor = [[UIColor greenColor] colorWithAlphaComponent:0.5];
     level_2.frame = CGRectMake(10, 90, 300, 150);
     [level_1 addSubview:level_2];
+    // 放开下面的注释，可测试相同的 Selector 是否可以被多个 target 选为 action。
+//    [level_2 addTarget:self action:@selector(touchUpInsideAfterAllTouch_2_1:) forControlEvents:UIControlEventTouchUpInside];
     [level_2 addTarget:self action:@selector(touchUpInside_2:) forControlEvents:UIControlEventTouchUpInside];
     
     HitTestBubbleButton *level_3 = [[HitTestBubbleButton alloc] initWithName:@"Level_3" bubble:self.canBubbleUp];

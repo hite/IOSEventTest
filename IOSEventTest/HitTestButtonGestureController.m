@@ -76,15 +76,15 @@
     [level_2_1 addTarget:self action:@selector(touchDown_2_1:) forControlEvents:UIControlEventTouchDown];
     [level_2_1 addTarget:self action:@selector(touchUpAfter_2_1:) forControlEvents:UIControlEventTouchUpInside];
     
+    UITapGestureRecognizer *commontap = [[UITapGestureRecognizer alloc] init];
+    //        tap.cancelsTouchesInView = NO;
+    [commontap addTarget:self action:@selector(common_button_lv2:)];
     {
 //      测试多个 gestrue 的情况
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] init];
-//        tap.cancelsTouchesInView = NO;
-        [tap addTarget:self action:@selector(button_2_1:)];
-        [level_2_1 addGestureRecognizer:tap];
+//        [level_2_1 addGestureRecognizer:commontap];
         UITapGestureRecognizer *tap2 = [[UITapGestureRecognizer alloc] init];
         tap2.cancelsTouchesInView = NO;
-        [tap2 addTarget:self action:@selector(bu2tton_2_2_1:)];
+        [tap2 addTarget:self action:@selector(button_2_1:)];
         [level_2_1 addGestureRecognizer:tap2];
     }
 
@@ -92,11 +92,9 @@
     level_2.backgroundColor = [[UIColor greenColor] colorWithAlphaComponent:0.5];
     level_2.frame = CGRectMake(10, 90, 300, 150);
     [level_1 addSubview:level_2];
-    {
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] init];
-        [tap addTarget:self action:@selector(button_2:)];
-        [level_2 addGestureRecognizer:tap];
-    }
+    // 测试 tap 事件的复用。结论：不能复用，recognize 由后面添加的元素所用。
+    [level_2 addGestureRecognizer:commontap];
+//    [level_2_1 addGestureRecognizer:commontap];
     [level_2 addTarget:self action:@selector(touchUpInside_2:) forControlEvents:UIControlEventTouchUpInside];
     
     HitTestBubbleButton *level_3 = [[HitTestBubbleButton alloc] initWithName:@"Level_3" bubble:self.canBubbleUp];
