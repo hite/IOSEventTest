@@ -1,4 +1,3 @@
-#关于 UIResponder 链和 target-action 事件的相互影响的机理和应用
 https://github.com/hite/IOSEventTest
 
 **这是一个供探索、验证、对比测试而精心设计的demo。**
@@ -7,8 +6,8 @@ https://github.com/hite/IOSEventTest
 1. 第一响应者如何确认？（包括 `alpha，hidden，clipToBound` 属性的影响，都不是本次试验的重点）
 2. target-action 和 tapGesture 混用时，如何表现，加入变量 `cancelsTouchesInView` 时，是否有不同？
 3. target-action 或者 tapGesture 是否各自都有多个？
-   - 包括相同类型 event state 和 gesture Type 是否有多个？
-   - 包括不同类型 event state 和 gesture Type 是否有多个？
+   1. 包括相同类型 event state 和 gesture Type 是否有多个？
+   2. 包括不同类型 event state 和 gesture Type 是否有多个？
 4. 相同和不同类型 target-action 或者 tapGesture 的添加顺序和执行顺序是否有关系？
 
 ### 设计可测试变量
@@ -23,7 +22,7 @@ https://github.com/hite/IOSEventTest
 
 *如果没有条件运行源码自己观察，下面是我自己的观察和总结，可能有谬误，欢迎指正*
 -------TLTR;--------
-######1. HitTestTouchViewController, 测试普通的 UILabel 元素在是否事件冒泡到父元素的表现
+#####1. HitTestTouchViewController, 测试普通的 UILabel 元素在是否事件冒泡到父元素的表现
 场景1：只有 touch 事件，没有添加 tap 手势，不 bubble 时。
 1. 元素通过 hittest 测试，找到第一响应者后，事件不会继续向下传递。因为第一响应获取之后没有传递
 1. 可以正确 touchesEnded；
@@ -32,7 +31,7 @@ https://github.com/hite/IOSEventTest
 1. 元素通过 hittest 测试，找到第一响应者后，事件还会继续向上传递事件，按照从子到父的过程，传播事件
 1. 可以正确 touchesEnded；
 
-######2. HitTestTouchGestureController，测试普通的 UILabel 元素在响应 touch 事件的同时，还被添加的 tapGesture 的表现
+**HitTestTouchGestureController，测试普通的 UILabel 元素在响应 touch 事件的同时，还被添加的 tapGesture 的表现**
 
 情况1：普通的 UIResponder 元素， 所有元素都有 touch 事件也有 gesture, touch 事件不 bubble 的情况下
 1. UIApplication 接收到时间，通过 hittest 找到第一响应者之后，先执行 touchesBegan ，然后调用 gesture，然后根据 cancelsTouchesInView 的值，决定是 touchCancelled 还是 touchesEnded。
@@ -45,21 +44,22 @@ https://github.com/hite/IOSEventTest
  结论：容许 bubble 的情况下都可以传播到父元素（这是显而易见的，也是这个实验设计的缺陷，在 touchesEnded 里去调用 super 的 touchesEnded 是不是真的符合实际情况？），cancelsTouchesInView 只影响 touch 结束的事件。
  *但父元素的 TapGesture 不会响应* 
 
-######3. HitTestButtonViewController，测试 UIButton 有 addTarget，无 gesture 手势时，是否 bubble up 对 target-action 的影响
+
+**HitTestButtonViewController，测试 UIButton 有 addTarget，无 gesture 手势时，是否 bubble up 对 target-action 的影响**
 
 *多个不同元素、多个相同元素、元素的顺序，元素属性修改是否有影响*
 情况1：普通的 UIControl 元素， 所有元素都有 touch 事件，有 action 回调，没有 gesture, touch 事件不 bubble 的情况下
 1. UIApplication 接收到时间，通过 hittest 找到第一响应者之后，先执行 touchesBegan，再执行 touchesEnded。但是不会执行 action 回调（why？）
 2. 猜测原因：super 的 `touchesEnded:withEvent:` 会调用触发 `UIControlEventTouchUpInside`，因为我们没有调用 super 所以没有触发。
 有调用栈为参考，
-![调用栈](http://upload-images.jianshu.io/upload_images/277783-9e9adfb77088c5ef?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)，
+![调用栈](https://note.youdao.com/yws/public/resource/da1fb057778fbcf4a05cb9c994b13846/xmlnote/WEBRESOURCE2e305427f7f7b8ec064721da3377d0dc/476)，
 可见，触发 action-target 都是由 UIControl 父类实现的。
  
 情况2：普通的 UIControl 元素， 所有元素都有 touch 事件，有 action 回调，没有 gesture, touch 事件容许 bubble 的情况下
 1. UIApplication 接收到时间，通过 hittest 找到第一响应者之后，先执行 action 回调（allTouchEvent，touchDown 等）、touchesBegan，再执行 action 回调（touchUpInside之类）、touchesEndeded
 1. touch 事件不会传播到父元素，即使是没有 action 回调， button 上的事件也不会向父元素传播。
 
-######4. HitTestButtonGestureController，测试 UIButton 有 addTarget，同时也有 gesture 手势时，是否 bubble up 对 target-action 和 gesture 的影响
+**HitTestButtonGestureController，测试 UIButton 有 addTarget，同时也有 gesture 手势时，是否 bubble up 对 target-action 和 gesture 的影响**
 
 情况1：普通的 UIControl 元素， 所有元素都有 touch 事件，有 action 回调，而且有 gesture, touch 事件不 bubble 的情况下
 1. UIApplication 接收到时间，通过 hittest 找到第一响应者之后，先执行 touchesBegan，接下来执行最后一个 gesture 手势，
@@ -70,9 +70,10 @@ https://github.com/hite/IOSEventTest
  
 情况2：普通的 UIControl 元素， 所有元素都有 touch 事件，有 action 回调，而且有 gesture, touch 事件需要 bubble 的情况下
 1. UIApplication 接收到时间，通过 hittest 找到第一响应者之后
-   - cancelsTouchesInView=NO 时，先执行 action 回调（allTouchEvent，touchDown 等）、touchesBegan，接着是执行 tap 手势响应（重点），再执行 action 回调（touchUpInside之类）、touchesEnded
-   - cancelsTouchesInView=YES 时，先执行 touchesBegan，接下来执行最后一个 gesture 手势，再执行 touchesCancelled
+   1. cancelsTouchesInView=NO 时，先执行 action 回调（allTouchEvent，touchDown 等）、touchesBegan，接着是执行 tap 手势响应（重点），再执行 action 回调（touchUpInside之类）、touchesEnded
+   2. cancelsTouchesInView=YES 时，先执行 touchesBegan，接下来执行最后一个 gesture 手势，再执行 touchesCancelled
 1. touch 事件不会传播到父元素， gesture 更不会传播到父元素
+
 
 ### 结论：
 1. 一个元素只能有一个 某某类型的 gesture，后来者覆盖前者；但是可以有多个不同类型的 gesture。
@@ -86,6 +87,7 @@ https://github.com/hite/IOSEventTest
 6. `cancelTrackingWithEvent` 是由 `touchesCancelled:withEvent:` 调用的。
 7. `When adding an action method to a control, you specify both the action method and an object that defines that method to the addTarget:action:forControlEvents: method. If you specify nil for the target object, the control searches the responder chain for an object that defines the specified action method.` 他的含义在于如果 level_2 元素上的某个类型的 action 对应的 target = nil，则回去找 level_1 的 类型，查询 respondsToSelector 是否为 YES。    
 而不是理解为：level_2 不响应 event，然后让 level_1 来处理，这样理解是错误的。当然大部分情况下 target = nil ，还不如将这控件设置为 disabled（不考虑样式上的区别）。
+
 
 ### 原理
 通过简单的调用栈比较发现 当 `[UIWindow sendEvent:]` 之后
