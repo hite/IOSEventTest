@@ -1,3 +1,4 @@
+#关于TapGesture、UIResponder 链和 target-action 事件的相互影响的机理和应用
 https://github.com/hite/IOSEventTest
 
 **这是一个供探索、验证、对比测试而精心设计的demo。**
